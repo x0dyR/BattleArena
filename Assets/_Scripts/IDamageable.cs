@@ -3,7 +3,7 @@ using System;
 public interface IDamageable
 {
     event Action TookDamage;
-    event Action Died;
+    event Action<IDamageable> Died;
 
     void TakeDamage(int damage);
 }

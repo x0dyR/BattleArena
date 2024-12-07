@@ -11,11 +11,12 @@ public class Bullet : MonoBehaviour
     public void Launch(Vector3 direction)
     {
         _rigidbody.AddForce(direction, ForceMode.Impulse);
+        Destroy(gameObject, 3);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (collision.collider.TryGetComponent(out IDamageable damageable))
+        if (collider.TryGetComponent(out IDamageable damageable) && collider.TryGetComponent(out Character _) == false)
         {
             damageable.TakeDamage(_damage);
             Destroy(gameObject);
