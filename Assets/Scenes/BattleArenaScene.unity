@@ -20205,11 +20205,11 @@ MonoBehaviour:
   - {fileID: 440157183}
   - {fileID: 1633492377}
   _spawnCooldown: 3
-  _winConditions: 99
-  _looseConditions: 0
+  _winConditions: 0
+  _looseConditions: 99
   _maxEnemyAtArena: 10
-  _killToWin: 10
-  _enemyToCapture: 3
+  _killToWin: 6
+  _enemyToCapture: 5
   _timeToSurvive: 10
 --- !u!1 &2085675160
 GameObject:

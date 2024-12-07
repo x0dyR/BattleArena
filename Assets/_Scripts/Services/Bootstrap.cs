@@ -33,10 +33,12 @@ public class Bootstrap : MonoBehaviour
     private IWinCondition _winCondition;
     private ILooseCondition _looseCondition;
 
-    [SerializeField,Range(1,10)] private int _maxEnemyAtArena;
-    [SerializeField,Range(1,10)] private int _killToWin;
-    [SerializeField,Range(5,7)] private int _enemyToCapture;
-    [SerializeField,Range(1,100)] private float _timeToSurvive;
+    [SerializeField, Range(1, 10)] private int _maxEnemyAtArena;
+    [SerializeField, Range(1, 10)] private int _killToWin;
+    [SerializeField, Range(5, 7)] private int _enemyToCapture;
+    [SerializeField, Range(1, 100)] private float _timeToSurvive;
+
+    private bool _isUnsubbed;
 
     private void Awake()
     {
@@ -50,7 +52,6 @@ public class Bootstrap : MonoBehaviour
 
         _enemyFactory = new EnemyFactory(_enemmyPrefab);
         _enemySpawner = new EnemySpawner(this, _enemyFactory, _enemySpawnPoints, _spawnCooldown, _maxEnemyAtArena);
-        _enemySpawner.StartSpawn();
 
         _winCondition = _winConditions switch
         {
@@ -62,21 +63,26 @@ public class Bootstrap : MonoBehaviour
         _looseCondition = _looseConditions switch
         {
             LooseConditions.CharacterDied => new CharacterDiedCondition(_characterInstance),
-            LooseConditions.ArenaCaptured => new CapturedArenaCondition(_enemySpawner, _enemyToCapture),
+            LooseConditions.ArenaCaptured => new ArenaCapturedCondition(_enemySpawner, _enemyToCapture),
             _ => throw new ArgumentException("No suitable condition"),
         };
+
 
         _winCondition.Start();
         _looseCondition.Start();
 
+        _enemySpawner.StartSpawn();
         _winCondition.Won += OnWon;
         _looseCondition.Lost += OnLost;
     }
 
     private void OnDisable()
     {
-        _winCondition.Won -= OnWon;
-        _looseCondition.Lost -= OnLost;
+        if (_isUnsubbed == false)
+        {
+            _winCondition.Won -= OnWon;
+            _looseCondition.Lost -= OnLost;
+        }
 
         _winCondition.End();
         _looseCondition.End();
@@ -104,17 +110,21 @@ public class Bootstrap : MonoBehaviour
         return view;
     }
 
-    private void OnLost()
+    private void OnLost() => EndGame("Lost");
+
+    private void OnWon() => EndGame("Won");
+
+    private void EndGame(string message)
     {
+        _isUnsubbed = true;
+
+        _winCondition.Won -= OnWon;
+        _looseCondition.Lost -= OnLost;
+
         _winCondition.End();
-
-        Debug.Log("Lost");
-    }
-
-    private void OnWon()
-    {
         _looseCondition.End();
 
-        Debug.Log("Won");
+        _enemySpawner.StopSpawn();
+        Debug.Log(message);
     }
 }
