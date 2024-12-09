@@ -17,30 +17,10 @@ public class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public ObstacleChecker ObstacleChecker { get; private set; }
     [field: SerializeField] public float Speed { get; private set; }
     [field: SerializeField] public int Damage { get; private set; }
-    [field: SerializeField] public int MaxHealth { get; private set; }
     [field: SerializeField] public int CurrentHealth { get; private set; }
     [field: SerializeField] public int TimeToChangeDirection { get; private set; }
 
     public bool IsInitialized { get; private set; }
-
-    private void OnDisable()
-    {
-        _health.CurrentHealth.Changed -= OnHealthChanged;
-        _health.Died -= OnDied;
-        _triggerReciever.Triggered -= OnTriggered;
-    }
-
-    private void OnDied()
-    {
-        Died?.Invoke(this);
-        Destroy(gameObject);
-    }
-
-    private void OnHealthChanged(int obj)
-    {
-        CurrentHealth = _health.CurrentHealth.Value;
-        TookDamage?.Invoke();
-    }
 
     private void Update()
     {
@@ -54,6 +34,13 @@ public class Enemy : MonoBehaviour, IDamageable
         }
 
         _mover.ProcessMove(Vector3.one);
+    }
+
+    private void OnDisable()
+    {
+        _health.CurrentHealth.Changed -= OnHealthChanged;
+        _health.Died -= OnDied;
+        _triggerReciever.Triggered -= OnTriggered;
     }
 
     public void Initialize(IMover mover, IOnTriggerEnterAction onTriggerEnter, Health health)
@@ -75,7 +62,19 @@ public class Enemy : MonoBehaviour, IDamageable
         IsInitialized = new object[] { _mover, _onTriggerEnter, _health, _triggerReciever }.All(s => s != null);
     }
 
+    private void OnTriggered(Collider other) => _onTriggerEnter.Action(other);
+
     public void TakeDamage(int damage) => _health.TakeDamage(damage);
 
-    private void OnTriggered(Collider other) => _onTriggerEnter.Action(other);
+    private void OnDied()
+    {
+        Died?.Invoke(this);
+        Destroy(gameObject);
+    }
+
+    private void OnHealthChanged(int obj)
+    {
+        TookDamage?.Invoke();
+        CurrentHealth = _health.CurrentHealth.Value;
+    }
 }

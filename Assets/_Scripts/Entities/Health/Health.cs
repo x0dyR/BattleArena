@@ -13,9 +13,9 @@ public class Health
         _currentHealth = new ReactiveValue<int>(currentHealth);
     }
 
-    public ReactiveValue<int> MaxHealth => _maxHealth;
+    public IReadOnlyReactiveVlue<int> MaxHealth => _maxHealth;
 
-    public ReactiveValue<int> CurrentHealth => _currentHealth;
+    public IReadOnlyReactiveVlue<int> CurrentHealth => _currentHealth;
 
     public bool IsDead => _currentHealth.Value < 0;
 

@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class ArenaCapturedCondition : ILooseCondition
 {
@@ -8,14 +7,12 @@ public class ArenaCapturedCondition : ILooseCondition
     private EnemySpawner _spawner;
 
     private int _enemyCountToCapture;
-    private int _currentCount;
+    private int _currentCount = 0; 
 
     public ArenaCapturedCondition(EnemySpawner spawner, int enemyToCapture)
     {
         _spawner = spawner;
         _enemyCountToCapture = enemyToCapture;
-
-        _currentCount = 0;
     }
 
     public void Start() => _spawner.Enemies.Added += OnAdded;

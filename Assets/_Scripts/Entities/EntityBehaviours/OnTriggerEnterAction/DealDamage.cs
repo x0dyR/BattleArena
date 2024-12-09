@@ -11,7 +11,7 @@ public class DealDamage : IOnTriggerEnterAction
 
     public void Action(Collider collider)
     {
-        if (collider.TryGetComponent(out IDamageable damageable) && collider.TryGetComponent(out Enemy _) == false)
+        if (collider.TryGetComponent(out IDamageable damageable) && (collider.TryGetComponent(out Enemy _) == false))
             damageable.TakeDamage(_damage);
     }
 }

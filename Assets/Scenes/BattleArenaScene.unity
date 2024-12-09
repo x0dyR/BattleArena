@@ -20204,6 +20204,7 @@ MonoBehaviour:
   - {fileID: 1569741829}
   - {fileID: 440157183}
   - {fileID: 1633492377}
+  _enemyMaxHealth: 100
   _spawnCooldown: 3
   _winConditions: 0
   _looseConditions: 99

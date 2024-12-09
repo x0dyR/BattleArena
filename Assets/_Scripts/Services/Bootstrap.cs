@@ -24,6 +24,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private List<Transform> _enemySpawnPoints;
 
     private EnemyFactory _enemyFactory;
+    [SerializeField] private int _enemyMaxHealth;
     private EnemySpawner _enemySpawner;
     [SerializeField] private int _spawnCooldown;
 
@@ -50,7 +51,7 @@ public class Bootstrap : MonoBehaviour
             GetCharacterView(_characterInstance);
         }
 
-        _enemyFactory = new EnemyFactory(_enemmyPrefab);
+        _enemyFactory = new EnemyFactory(_enemmyPrefab,_enemyMaxHealth);
         _enemySpawner = new EnemySpawner(this, _enemyFactory, _enemySpawnPoints, _spawnCooldown, _maxEnemyAtArena);
 
         _winCondition = _winConditions switch
@@ -72,6 +73,7 @@ public class Bootstrap : MonoBehaviour
         _looseCondition.Start();
 
         _enemySpawner.StartSpawn();
+
         _winCondition.Won += OnWon;
         _looseCondition.Lost += OnLost;
     }

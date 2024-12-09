@@ -1,6 +1,6 @@
 using System;
 
-public class ReactiveValue<T> where T : IComparable
+public class ReactiveValue<T> : IReadOnlyReactiveVlue<T> where T : IComparable
 {
     public event Action<T> Changed;
 

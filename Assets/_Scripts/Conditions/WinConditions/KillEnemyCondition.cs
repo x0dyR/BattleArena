@@ -23,8 +23,8 @@ public class KillEnemyCondition : IWinCondition
 
     private void OnDied(IDamageable damageable)
     {   
-        damageable.Died -= OnDied;
         _diedCount++;
+        damageable.Died -= OnDied;
 
         if (_diedCount >= _killToWin)
             Won?.Invoke();

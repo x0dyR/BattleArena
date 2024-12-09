@@ -3,10 +3,10 @@ using UnityEngine;
 
 public interface IMover
 {
-    ObstacleChecker ObstacleChecker { get; }
-
     event Action Moved;
     event Action Stopped;
+
+    ObstacleChecker ObstacleChecker { get; }
 
     void ProcessMove(Vector3 direction);
 }

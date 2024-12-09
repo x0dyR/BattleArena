@@ -7,14 +7,14 @@ public class RandomDirectionMover : IMover
     public event Action Moved;
     public event Action Stopped;
 
+    private const float DeadZone = .1f;
+
     private CharacterController _characterController;
     private float _speed;
 
     private Vector3 _currentDirection;
     private float _timeToChangeDirection;
     private float _currentTime = 0;
-
-    private const float DeadZone = .1f;
 
     public RandomDirectionMover(CharacterController characterController, float speed, ObstacleChecker obstacleChecker, float timeToChangeDirection)
     {
